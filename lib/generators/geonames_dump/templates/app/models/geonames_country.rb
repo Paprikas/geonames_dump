@@ -4,7 +4,7 @@ class GeonamesCountry < ActiveRecord::Base
   ##
   # search by iso first, then by name if not found
   #
-  scope :search, lambda { |q|
+  scope :geo_search, lambda { |q|
     by_iso(q).count > 0 ? by_iso(q) : by_name(q)
   }
 
