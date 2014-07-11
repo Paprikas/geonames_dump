@@ -11,7 +11,7 @@ class GeonamesAlternateName < ActiveRecord::Base
   ##
   # default search (by alternate name)
   #
-  scope :search, lambda { |q|
+  scope :geo_search, lambda { |q|
     by_alternate_name_featured(q)
   }
 
