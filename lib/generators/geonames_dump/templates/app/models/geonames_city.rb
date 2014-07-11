@@ -1,2 +1,2 @@
-class GeonamesCity < GeonamesFeature
+class Geonames::GeonamesCity < Geonames::GeonamesFeature
 end

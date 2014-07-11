@@ -50,7 +50,7 @@ namespace :geonames_dump do
       # Import into the database.
       File.open(txt_file) do |f|
         # TODO: add feature selection
-        insert_data(f, GEONAMES_FEATURES_COL_NAME, GeonamesCity, :title => "Features")
+        insert_data(f, GEONAMES_FEATURES_COL_NAME, Geonames::GeonamesCity, :title => "Features")
       end
     end
 
@@ -62,7 +62,7 @@ namespace :geonames_dump do
         txt_file = get_or_download("http://download.geonames.org/export/dump/cities#{population}.zip")
 
         File.open(txt_file) do |f|
-          insert_data(f, GEONAMES_FEATURES_COL_NAME, GeonamesCity, :title => "cities of #{population}")
+          insert_data(f, GEONAMES_FEATURES_COL_NAME, Geonames::GeonamesCity, :title => "cities of #{population}")
         end
       end
     end
@@ -72,7 +72,7 @@ namespace :geonames_dump do
       txt_file = get_or_download('http://download.geonames.org/export/dump/countryInfo.txt')
 
       File.open(txt_file) do |f|
-        insert_data(f, GEONAMES_COUNTRIES_COL_NAME, GeonamesCountry, :title => "Countries")
+        insert_data(f, GEONAMES_COUNTRIES_COL_NAME, Geonames::GeonamesCountry, :title => "Countries")
       end
     end
 
@@ -84,7 +84,7 @@ namespace :geonames_dump do
       File.open(txt_file) do |f|
         insert_data(f,
                     GEONAMES_ALTERNATE_NAMES_COL_NAME,
-                    GeonamesAlternateName,
+                    Geonames::GeonamesAlternateName,
                     :title => "Alternate names",
                     :buffer => 10000,
                     :primary_key => [:alternate_name_id, :geonameid])
@@ -97,7 +97,7 @@ namespace :geonames_dump do
                                  txt_file: 'iso-languagecodes.txt')
 
       File.open(txt_file) do |f|
-        insert_data(f, GEONAMES_COUNTRIES_COL_NAME, GeonamesCountry, :title => "Countries")
+        insert_data(f, GEONAMES_COUNTRIES_COL_NAME, Geonames::GeonamesCountry, :title => "Countries")
       end
     end
 
@@ -106,7 +106,7 @@ namespace :geonames_dump do
       txt_file = get_or_download('http://download.geonames.org/export/dump/admin1CodesASCII.txt')
 
       File.open(txt_file) do |f|
-        insert_data(f, GEONAMES_ADMINS_COL_NAME, GeonamesAdmin1, :title => "Admin1 subdivisions") do |klass, attributes, col_value, idx|
+        insert_data(f, GEONAMES_ADMINS_COL_NAME, Geonames::GeonamesAdmin1, :title => "Admin1 subdivisions") do |klass, attributes, col_value, idx|
           col_value.gsub!('(general)', '')
           col_value.strip!
           if idx == 0
@@ -125,7 +125,7 @@ namespace :geonames_dump do
       txt_file = get_or_download('http://download.geonames.org/export/dump/admin2Codes.txt')
 
       File.open(txt_file) do |f|
-        insert_data(f, GEONAMES_ADMINS_COL_NAME, GeonamesAdmin2, :title => "Admin2 subdivisions") do |klass, attributes, col_value, idx|
+        insert_data(f, GEONAMES_ADMINS_COL_NAME, Geonames::GeonamesAdmin2, :title => "Admin2 subdivisions") do |klass, attributes, col_value, idx|
           col_value.gsub!('(general)', '')
           if idx == 0
             country, admin1, admin2 = col_value.split('.')
@@ -199,7 +199,7 @@ namespace :geonames_dump do
       return res.body
     end
 
-    def insert_data(file_fd, col_names, main_klass = GeonamesFeature, options = {}, &block)
+    def insert_data(file_fd, col_names, main_klass = Geonames::GeonamesFeature, options = {}, &block)
       # Setup nice progress output.
       file_size = file_fd.stat.size
       title = options[:title] || 'Feature Import'

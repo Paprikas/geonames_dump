@@ -1,4 +1,4 @@
-class GeonamesAlternateName < ActiveRecord::Base
+class Geonames::GeonamesAlternateName < ActiveRecord::Base
   validates_uniqueness_of :alternate_name_id
   before_save :set_alternate_name_first_letters
 
@@ -33,7 +33,7 @@ class GeonamesAlternateName < ActiveRecord::Base
   # search by name for available features
   #
   scope :by_alternate_name_featured, lambda { |q|
-    joins(:geonames_feature).by_alternate_name(q).where(GeonamesFeature.arel_table[:id].not_eq(nil))
+    joins(:geonames_feature).by_alternate_name(q).where(Geonames::GeonamesFeature.arel_table[:id].not_eq(nil))
   }
 
   ##
