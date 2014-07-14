@@ -35,7 +35,7 @@ class Geonames::GeonamesFeature < ActiveRecord::Base
   # Find by names
   #
   scope :by_name, lambda { |*queries|
-    ret = self.scoped
+    ret = self.all
     count = queries.count
     queries.collect.with_index do |q, idx|
       query = idx == 0 ? "#{q}" : "%#{q}%"
