@@ -215,6 +215,7 @@ namespace :geonames_dump do
         # prepare data
         attributes = {}
         klass = main_klass
+        skip = false
 
         # skip comments
         next if line.start_with?('#')
@@ -224,6 +225,15 @@ namespace :geonames_dump do
         # read values
         line.strip.split("\t").each_with_index do |col_value, idx|
           col = col_names[idx]
+
+          # Disable due encoding problems
+          col_value = '' if col == :alternatenames
+
+          # Usage rake geonames_dump:import:cities15000 country=FR,US
+          skip = true if ENV['country'].present? && col == :country_code && !col_value.in?(ENV['country'].split(','))
+
+          # Usage rake geonames_dump:import:cities15000 poplimit=200000
+          skip = true if ENV['poplimit'].present? && col == :population && col_value.to_i < ENV['poplimit'].to_i
 
           # skip leading and trailing whitespace
           col_value.strip!
@@ -235,6 +245,8 @@ namespace :geonames_dump do
             attributes[col] = col_value
           end
         end
+
+        next if skip
 
         # create or update object
         #if filter?(attributes) && (block && block.call(attributes))

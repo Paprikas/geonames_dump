@@ -75,6 +75,13 @@ rake geonames_dump:truncate:features        # Truncate features informations
 rake geonames_dump:truncate:alternate_names # Import alternate names
 ```
 
+```
+rake geonames_dump:import:cities country=FR            # Import all cities filtered by entered country
+rake geonames_dump:import:cities country=US,FR       # Import all cities filtered by entered country
+rake geonames_dump:import:cities poplimit=100000       # Import all cities with population greater than 100000
+rake geonames_dump:import:cities15000 poplimit=100000  # Import all cities with population greater than 100000
+```
+
 ## Geonames data usage
 
 The above commands will import geonames data in your Rails application, in
