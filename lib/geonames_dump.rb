@@ -22,7 +22,7 @@ module GeonamesDump
         ret = Geonames::GeonamesFeature.geo_search(query) if ret.blank?
       else # country, or specific type
         model = Geonames.const_get("geonames_#{type.to_s}".camelcase)
-        ret = model.search(query)
+        ret = model.geo_search(query)
       end
     rescue NameError => e
       raise $!, "Unknown type for GeonamesDump, #{$!}", $!.backtrace
