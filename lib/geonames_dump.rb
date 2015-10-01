@@ -21,7 +21,7 @@ module GeonamesDump
         # feature
         ret = Geonames::GeonamesFeature.geo_search(query) if ret.blank?
       else # country, or specific type
-        model = "geonames_#{type.to_s}".camelcase.constantize
+        model = Geonames.const_get("geonames_#{type.to_s}".camelcase)
         ret = model.search(query)
       end
     rescue NameError => e
