@@ -1,4 +1,4 @@
-class Geonames::GeonamesFeature < ActiveRecord::Base
+class Geonames::Feature < ActiveRecord::Base
   validates_uniqueness_of :geonameid
   before_save :set_asciiname_first_letters
 
@@ -24,7 +24,7 @@ class Geonames::GeonamesFeature < ActiveRecord::Base
     ret = by_name(*queries)
 
     unless country.nil?
-      geonames_country = Geonames::GeonamesCountry.search(country).first
+      geonames_country = Geonames::Country.search(country).first
       ret = ret.where(:country_code => geonames_country.iso) unless geonames_country.nil?
     end
 

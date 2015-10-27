@@ -11,17 +11,17 @@ module GeonamesDump
       case type
       when :auto # return an array of features
         # city name
-        ret = Geonames::GeonamesCity.geo_search(query)
+        ret = Geonames::City.geo_search(query)
         # alternate name
-        ret = Geonames::GeonamesAlternateName.geo_search(query).map { |alternate| alternate.feature }.compact  if ret.blank?
+        ret = Geonames::AlternateName.geo_search(query).map { |alternate| alternate.feature }.compact  if ret.blank?
         # admin1
-        ret = Geonames::GeonamesAdmin1.geo_search(query) if ret.blank?
+        ret = Geonames::Admin1.geo_search(query) if ret.blank?
         # admin2
-        ret = Geonames::GeonamesAdmin2.geo_search(query) if ret.blank?
+        ret = Geonames::Admin2.geo_search(query) if ret.blank?
         # feature
-        ret = Geonames::GeonamesFeature.geo_search(query) if ret.blank?
+        ret = Geonames::Feature.geo_search(query) if ret.blank?
       else # country, or specific type
-        model = Geonames.const_get("geonames_#{type.to_s}".camelcase)
+        model = Geonames.const_get("#{type.to_s}".camelcase)
         ret = model.geo_search(query)
       end
     rescue NameError => e
