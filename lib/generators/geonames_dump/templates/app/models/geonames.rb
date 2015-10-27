@@ -1,3 +1,5 @@
 module Geonames
-  self.table_name_prefix = 'geonames_'
+  def self.table_name_prefix
+    'geonames_'
+    end
 end
