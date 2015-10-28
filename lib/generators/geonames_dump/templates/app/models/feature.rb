@@ -1,12 +1,12 @@
-class Geonames::GeonamesFeature < ActiveRecord::Base
+class Geonames::Feature < ActiveRecord::Base
   validates_uniqueness_of :geonameid
   before_save :set_asciiname_first_letters
 
-  has_many :geonames_alternate_names,
-    :inverse_of => :geonames_feature,
+  has_many :alternate_names,
+    :inverse_of => :feature,
     :primary_key => 'geonameid',
     :foreign_key => 'geonameid'
-  alias_method :alternate_names, :geonames_alternate_names
+  # alias_method :alternate_names, :geonames_alternate_names
 
   ##
   # Search for feature, searches might include country (separated by ',')
@@ -24,7 +24,7 @@ class Geonames::GeonamesFeature < ActiveRecord::Base
     ret = by_name(*queries)
 
     unless country.nil?
-      geonames_country = Geonames::GeonamesCountry.search(country).first
+      geonames_country = Geonames::Country.search(country).first
       ret = ret.where(:country_code => geonames_country.iso) unless geonames_country.nil?
     end
 
@@ -38,8 +38,8 @@ class Geonames::GeonamesFeature < ActiveRecord::Base
     ret = self.all
     count = queries.count
     queries.collect.with_index do |q, idx|
-      query = idx == 0 ? "#{q}" : "%#{q}%"
-      ret = ret.where("asciiname_first_letters = ?", q[0...3].downcase)
+      query =  "%#{q}%"
+      ret = ret.where("asciiname_first_letters = ?", q[0...3].downcase) if idx == 0
       ret = ret.where("name LIKE ? or asciiname LIKE ?", query, query)
     end
     ret
